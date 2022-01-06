@@ -1,9 +1,9 @@
-[tool.flakehell]
+[tool.flakeheaven]
 exclude = ["example.py", "setup.py", "README.rst"]
 max_line_length = 120
 show_source = true
 
-[tool.flakehell.plugins]
+[tool.flakeheaven.plugins]
 pycodestyle = ["+*"]
 pyflakes = ["+*"]
 flake8-commas = ["+*"]
@@ -17,7 +17,7 @@ from = {format = "flit", path = "pyproject.toml"}
 to = {format = "setuppy", path = "setup.py"}
 envs = ["main", "dev"]
 tag = "v."
-command = "python -m flakehell lint"
+command = "python -m flakeheaven lint"
 
 [tool.dephell.pytest]
 from = {format = "flit", path = "pyproject.toml"}
@@ -38,7 +38,7 @@ command = "isort -rc -y"
 [tool.dephell.typing]
 from = {format = "flit", path = "pyproject.toml"}
 envs = ["main"]
-command = "mypy --ignore-missing-imports --allow-redefinition flakehell/"
+command = "mypy --ignore-missing-imports --allow-redefinition flakeheaven/"
 
 # -- ISORT -- #
 
@@ -59,15 +59,15 @@ import_heading_localfolder = "app"
 # -- FLIT -- #
 
 [tool.flit.metadata]
-module="flakehell"
+module="flakeheaven"
 author="Gram (@orsinium)"
 author-email="master_fess@mail.ru"
-home-page="https://github.com/life4/flakehell"
+home-page="https://github.com/flakeheaven/flakeheaven"
 requires-python=">=3.5"
 requires=[
     "colorama",
     "entrypoints",
-    "flake8>=3.8.0",
+    "flake8>=4.0.1",
     "pygments",
     "toml",
     "urllib3",
@@ -90,22 +90,22 @@ classifiers=[
 ]
 
 [tool.flit.metadata.urls]
-Documentation = "https://flakehell.readthedocs.io/"
+Documentation = "https://github.com/flakeheaven/flakeheaven/blob/master/docs/"
 
 [tool.flit.scripts]
-flakehell = "flakehell:entrypoint"
-flake8helled = "flakehell:flake8_entrypoint"
+flakeheaven = "flakeheaven:entrypoint"
+flake8helled = "flakeheaven:flake8_entrypoint"
 
 [tool.flit.entrypoints."flake8.extension"]
-pylint = "flakehell.plugins:PyLintChecker"
+pylint = "flakeheaven.plugins:PyLintChecker"
 
 [tool.flit.entrypoints."flake8.report"]
-baseline = "flakehell.formatters:BaseLineFormatter"
-colored = "flakehell.formatters:ColoredFormatter"
-gitlab = "flakehell.formatters:GitlabFormatter"
-grouped = "flakehell.formatters:GroupedFormatter"
-json = "flakehell.formatters:JSONFormatter"
-stat = "flakehell.formatters:StatFormatter"
+baseline = "flakeheaven.formatters:BaseLineFormatter"
+colored = "flakeheaven.formatters:ColoredFormatter"
+gitlab = "flakeheaven.formatters:GitlabFormatter"
+grouped = "flakeheaven.formatters:GroupedFormatter"
+json = "flakeheaven.formatters:JSONFormatter"
+stat = "flakeheaven.formatters:StatFormatter"
 
 [tool.flit.metadata.requires-extra]
 docs = [
@@ -137,7 +137,7 @@ dev = [
     "flake8-executable",
     "flake8-expression-complexity",
     "flake8-fixme",
-    "flake8-functions",
+    "flake8-functions",  #  "mr_proper==0.0.4",  # support py36
     "flake8-future-import",
     "flake8-import-order",
     "flake8-isort",
@@ -158,7 +158,7 @@ dev = [
     "flake8-scrapy",
     "flake8-spellcheck",
     "flake8-sql",
-    "flake8-strict",
+    "flake8-strict",  "black==21.10b0", # https://github.com/smarkets/flake8-strict/issues/41
     "flake8-string-format",
     "flake8-tidy-imports",
     "flake8-todo",
@@ -170,7 +170,7 @@ dev = [
     "pylint",
     "typing-extensions", # required by WPS but isn't installed by DepHell
     "wemake-python-styleguide",
-
+    "mypy",
     "pytest",
     "isort[pyproject]",
 ]
