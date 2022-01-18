@@ -1,7 +1,14 @@
 # FlakeHeaven
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/pypi/l/flakeheaven)](https://opensource.org/licenses/MIT)
+[![python versions](https://img.shields.io/pypi/pyversions/flakeheaven)](https://pypi.org/project/flakeheaven/)
+
+[![version](https://img.shields.io/pypi/v/flakeheaven)](https://pypi.org/project/flakeheaven/)
+[![Downloads](https://img.shields.io/pypi/dm/flakeheaven)](https://pypi.org/project/flakeheaven/)
+
+[![CI](https://github.com/flakeheaven/flakeheaven/actions/workflows/ci.yaml/badge.svg)](https://github.com/flakeheaven/flakeheaven/actions/workflows/ci.yaml)
 [![Docs](https://readthedocs.org/projects/flakeheaven/badge/?version=latest)](https://flakeheaven.readthedocs.io/en/latest/)
+
 
 FlakeHeaven is a [Flake8](https://gitlab.com/pycqa/flake8) wrapper to make it cool.
 
