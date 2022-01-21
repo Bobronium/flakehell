@@ -8,40 +8,41 @@ on:
     branches:
       - master
 
+env:
+  POETRY_VIRTUALENVS_CREATE: "true"
+  POETRY_VIRTUALENVS_IN_PROJECT: "true"
+
 jobs:
   default:
-    name: "${{ matrix.step.env }} '${{ matrix.step.command }}' @ py${{ matrix.step.python }})"
+    name: "${{ matrix.step.env }} '${{ matrix.step.command }}' (@py${{ matrix.step.python }})"
     runs-on: ubuntu-latest
     strategy:
       matrix:
         step: [
           # original from drone CI startlark file
           # {env: "pytest", python: "3.6", extras: "main,dev", command: "pytest tests/"},  # disable or drop support?
-          {env: "pytest", python: "3.7", extras: "main,dev", command: "pytest tests/"},
-          {env: "pytest", python: "3.8", extras: "main,dev", command: "pytest tests/"},
-          {env: "pytest", python: "3.9", extras: "main,dev", command: "pytest tests/"},
-          {env: "main", python: "3.8", extras: "main,dev", command: "flakeheaven lint"},
-          {env: "typing", python: "3.8", extras: "main,dev", command: "mypy --ignore-missing-imports --allow-redefinition flakeheaven/ > /dev/null || yes | mypy --install-types && mypy --ignore-missing-imports --allow-redefinition flakeheaven/"},
+          {env: "pytest", python: "3.7", extras: "", command: "pytest tests/"},
+          {env: "pytest", python: "3.8", extras: "", command: "pytest tests/"},
+          {env: "pytest", python: "3.9", extras: "", command: "pytest tests/"},
+          {env: "main", python: "3.8", extras: "", command: "flakeheaven lint"},
+          {env: "typing", python: "3.8", extras: "", command: "mypy --ignore-missing-imports --allow-redefinition flakeheaven/ > /dev/null || yes | mypy --install-types && mypy --ignore-missing-imports --allow-redefinition flakeheaven/"},
           # additional
-          {env: "docs", python: "3.8", extras: "docs", command: "sphinx-build -W docs docs/build"},
-          {env: "isort", python: "3.8", extras: "main,dev", command: "isort --check flakeheaven"},
+          {env: "docs", python: "3.8", extras: "-E docs", command: "sphinx-build -W docs docs/build"},
+          {env: "isort", python: "3.8", extras: "", command: "isort --check flakeheaven"},
         ]
     container:
-      image: python:${{ matrix.step.python }}-alpine
+      image: python:${{ matrix.step.python }}-bullseye
       env:
         COVERAGE_FILE: ".coverage.${{ matrix.step.env }}.${{ matrix.step.python }}"
     steps:
       - name: Check out repository
         uses: actions/checkout@v2
-      - name: Setup env
-        run: |
-          apk add \
-            gcc \
-            libc-dev
+      - name: Install poetry
+        run: pip install poetry
       - name: Install with deps
         run: |
-          pip install .[${{ matrix.step.extras }}]
-
+          poetry install ${{ matrix.step.extras }}
       - name: Run command
         run: |
+          . ./.venv/bin/activate  # use venv created by poetry
           ${{ matrix.step.command }}
