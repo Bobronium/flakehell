@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "flakeheaven"
-version = "0.11.0"
+version = "0.11.1"
 description = "FlakeHeaven is a [Flake8](https://gitlab.com/pycqa/flake8) wrapper to make it cool."
 authors = ["Gram <master_fess@mail.ru>"]
 repository = "https://github.com/flakeheaven/flakeheaven"
