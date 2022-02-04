@@ -27,6 +27,15 @@ class Result(NamedTuple):
     line: str
 
 
+def is_relative_to(path: Path, maybe_parent: Path):
+    try:
+        path.relative_to(maybe_parent)
+    except ValueError:
+        return False
+    else:
+        return True
+
+
 class FlakeHeavenCheckersManager(Manager):
     """
     Patched flake8.checker.Manager to provide `plugins` support
@@ -34,9 +43,11 @@ class FlakeHeavenCheckersManager(Manager):
 
     def __init__(self, baseline: Optional[str], **kwargs):
         self.baseline = set()
+        self.relative = kwargs.pop('relative', False)
         if baseline:
             with open(baseline) as stream:
                 self.baseline = {line.strip() for line in stream}
+            self.root_path = Path(baseline).resolve().parent
         super().__init__(**kwargs)
 
     def make_checkers(self, paths: List[str] = None) -> None:
@@ -232,8 +243,11 @@ class FlakeHeavenCheckersManager(Manager):
 
             # skip baselined errors
             if self.baseline:
+                _path = Path(filename)
+                if self.relative and is_relative_to(_path, self.root_path):
+                    _path = _path.relative_to(self.root_path)
                 digest = make_baseline(
-                    path=filename,
+                    path=_path,
                     context=result.line,
                     code=result.error_code,
                     line=result.line_number,
